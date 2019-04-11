@@ -105,7 +105,7 @@ python main.py --dataset=mitstates --dataset_path=./mitstates \
 ```
 
 ### Fashion200k dataset
-Download the dataset from this [external website](https://github.com/xthan/fashion-200k) Download the standard test_queries.txt from here.
+Download the dataset from this [external website](https://github.com/xthan/fashion-200k) Download the standard test_queries.txt from [here](https://storage.googleapis.com/image_retrieval_css/test_queries.txt).
 
 Make sure the dataset include these files:
 
@@ -133,9 +133,9 @@ python main.py --dataset=fashion200k --dataset_path=./Fashion200k \
 Our pretrained models can be downloaded below. You can find our best single model accuracy:
 *The numbers are slightly different from the ones reported in the paper due to the re-implementation.*
 
-- [CSS Model](): 0.760
-- [Fashion200k Model](): 0.161
-- [MITStates Model](): 0.132
+- [CSS Model](https://storage.googleapis.com/image_retrieval_css/pretrained_models/checkpoint_css3d.pth): 0.760
+- [Fashion200k Model](https://storage.googleapis.com/image_retrieval_css/pretrained_models/checkpoint_fashion200k.pth): 0.161
+- [MITStates Model](https://storage.googleapis.com/image_retrieval_css/pretrained_models/checkpoint_mitstates.pth): 0.132
 
 
 
