@@ -58,7 +58,7 @@ existing approaches on different datasets.
 
 ### CSS3D dataset
 
-Download the dataset from this [external website](http://web.mit.edu/phillipi/Public/states_and_transformations/index.html).
+Download the dataset from this [external website]().
 
 Make sure the dataset include these files:
 `<dataset_path>/css_toy_dataset_novel2_small.dup.npy`
