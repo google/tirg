@@ -58,7 +58,7 @@ existing approaches on different datasets.
 
 ### CSS3D dataset
 
-Download the dataset from this [external website]().
+Download the dataset from this [external website](http://data.nam.ai/tirg.html).
 
 Make sure the dataset include these files:
 `<dataset_path>/css_toy_dataset_novel2_small.dup.npy`
@@ -105,7 +105,7 @@ python main.py --dataset=mitstates --dataset_path=./mitstates \
 ```
 
 ### Fashion200k dataset
-Download the dataset from this [external website](https://github.com/xthan/fashion-200k) Download the standard test_queries.txt from [here](https://storage.googleapis.com/image_retrieval_css/test_queries.txt).
+Download the dataset from this [external website](https://github.com/xthan/fashion-200k) Download our generated test_queries.txt from [here](https://storage.googleapis.com/image_retrieval_css/test_queries.txt).
 
 Make sure the dataset include these files:
 
