@@ -58,7 +58,7 @@ existing approaches on different datasets.
 
 ### CSS3D dataset
 
-Download the dataset from this [external website](http://data.nam.ai/tirg.html).
+Download the dataset from this [external website](https://drive.google.com/file/d/1wPqMw-HKmXUG2qTgYBiTNUnjz83hA2tY/view?usp=sharing).
 
 Make sure the dataset include these files:
 `<dataset_path>/css_toy_dataset_novel2_small.dup.npy`
