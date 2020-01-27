@@ -1,0 +1,7 @@
+torch==0.4.1
+tqdm==4.29.1
+torchvision==0.2.1
+numpy==1.17.4
+Pillow==7.0.0
+skimage==0.0
+tensorboardX==2.0

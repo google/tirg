@@ -40,11 +40,11 @@ existing approaches on different datasets.
 
 ## Setup
 
-- torchvision
-- pytorch
-- numpy
-- tqdm
-- tensorboardX
+Install dependencies using requirements.txt
+
+```shell
+pip install -r requirements.txt
+```
 
 ## Running Models
 
