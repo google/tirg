@@ -138,6 +138,8 @@ Our pretrained models can be downloaded below. You can find our best single mode
 - [MITStates Model](https://storage.googleapis.com/image_retrieval_css/pretrained_models/checkpoint_mitstates.pth): 0.132
 
 
+These saved weights might not be working correctly any more with new version, please refer to https://github.com/google/tirg/issues/12
+
 
 ## Notes:
 All log files will be saved at `./runs/<timestamp><comment>`.
