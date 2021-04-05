@@ -76,7 +76,7 @@ class CSSDataset(BaseDataset):
     self.imgs = []
     for objects in self.data[self.split]['objects_img']:
       label = len(self.imgs)
-      if self.data[self.split].has_key('labels'):
+      if 'labels' in self.data[self.split]:
         label = self.data[self.split]['labels'][label]
       self.imgs += [{
           'objects': objects,
@@ -242,7 +242,7 @@ class Fashion200k(BaseDataset):
             'modifiable': False
         }
         self.imgs += [img]
-    print 'Fashion200k:', len(self.imgs), 'images'
+    print('Fashion200k:', len(self.imgs), 'images')
 
     # generate query for training or testing
     if split == 'train':
@@ -295,13 +295,13 @@ class Fashion200k(BaseDataset):
     caption2imgids = {}
     for i, img in enumerate(self.imgs):
       for c in img['captions']:
-        if not caption2id.has_key(c):
+        if c not in caption2id:
           id2caption[len(caption2id)] = c
           caption2id[c] = len(caption2id)
           caption2imgids[c] = []
         caption2imgids[c].append(i)
     self.caption2imgids = caption2imgids
-    print len(caption2imgids), 'unique cations'
+    print(len(caption2imgids), 'unique cations')
 
     # parent captions are 1-word shorter than their children
     parent2children_captions = {}
@@ -309,7 +309,7 @@ class Fashion200k(BaseDataset):
       for w in c.split():
         p = c.replace(w, '')
         p = p.replace('  ', ' ').strip()
-        if not parent2children_captions.has_key(p):
+        if p not in parent2children_captions:
           parent2children_captions[p] = []
         if c not in parent2children_captions[p]:
           parent2children_captions[p].append(c)
@@ -329,7 +329,7 @@ class Fashion200k(BaseDataset):
     for img in self.imgs:
       if img['modifiable']:
         num_modifiable_imgs += 1
-    print 'Modifiable images', num_modifiable_imgs
+    print('Modifiable images', num_modifiable_imgs)
 
   def caption_index_sample_(self, idx):
     while not self.imgs[idx]['modifiable']:
@@ -510,7 +510,7 @@ class MITStates(BaseDataset):
                   'str': mod_str
               }
           }]
-    print len(self.test_queries), 'test queries'
+    print(len(self.test_queries), 'test queries')
 
   def __len__(self):
     return len(self.imgs)

@@ -40,7 +40,6 @@ def test(opt, model, testset):
           imgs = [torch.from_numpy(d).float() for d in imgs]
         imgs = torch.stack(imgs).float()
         imgs = torch.autograd.Variable(imgs).cuda()
-        mods = [t.decode('utf-8') for t in mods]
         f = model.compose_img_text(imgs, mods).data.cpu().numpy()
         all_queries += [f]
         imgs = []
@@ -75,7 +74,6 @@ def test(opt, model, testset):
       if len(imgs) > opt.batch_size or i == 9999:
         imgs = torch.stack(imgs).float()
         imgs = torch.autograd.Variable(imgs)
-        mods = [t.decode('utf-8') for t in mods]
         f = model.compose_img_text(imgs.cuda(), mods).data.cpu().numpy()
         all_queries += [f]
         imgs = []
@@ -99,11 +97,18 @@ def test(opt, model, testset):
     all_imgs[i, :] /= np.linalg.norm(all_imgs[i, :])
 
   # match test queries to target images, get nearest neighbors
-  sims = all_queries.dot(all_imgs.T)
-  if test_queries:
-    for i, t in enumerate(test_queries):
-      sims[i, t['source_img_id']] = -10e10  # remove query image
-  nn_result = [np.argsort(-sims[i, :])[:110] for i in range(sims.shape[0])]
+  # sims = all_queries.dot(all_imgs.T)
+  #sims = []
+  #if test_queries:
+  #  for i, t in enumerate(test_queries):
+  #    sims[i, t['source_img_id']] = -10e10  # remove query image
+  #nn_result = [np.argsort(-sims[i, :])[:110] for i in range(sims.shape[0])]
+  nn_result = []
+  for i in tqdm(range(all_queries.shape[0])):
+    sims = all_queries[i:(i+1), :].dot(all_imgs.T)
+    if test_queries:
+      sims[0, test_queries[i]['source_img_id']] = -10e10  # remove query image
+    nn_result.append(np.argsort(-sims[0, :])[:110])
 
   # compute recalls
   out = []

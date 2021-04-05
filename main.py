@@ -58,7 +58,7 @@ def parse_opt():
 
 def load_dataset(opt):
   """Loads the input datasets."""
-  print 'Reading dataset ', opt.dataset
+  print('Reading dataset ', opt.dataset)
   if opt.dataset == 'css3d':
     trainset = datasets.CSSDataset(
         path=opt.dataset_path,
@@ -119,17 +119,17 @@ def load_dataset(opt):
                                              [0.229, 0.224, 0.225])
         ]))
   else:
-    print 'Invalid dataset', opt.dataset
+    print('Invalid dataset', opt.dataset)
     sys.exit()
 
-  print 'trainset size:', len(trainset)
-  print 'testset size:', len(testset)
+  print('trainset size:', len(trainset))
+  print('testset size:', len(testset))
   return trainset, testset
 
 
 def create_model_and_optimizer(opt, texts):
   """Builds the model and related optimizer."""
-  print 'Creating model and optimizer for', opt.model
+  print('Creating model and optimizer for', opt.model)
   if opt.model == 'imgonly':
     model = img_text_composition_models.SimpleModelImageOnly(
         texts, embed_dim=opt.embed_dim)
@@ -144,8 +144,8 @@ def create_model_and_optimizer(opt, texts):
     model = img_text_composition_models.TIRGLastConv(
         texts, embed_dim=opt.embed_dim)
   else:
-    print 'Invalid model', opt.model
-    print 'available: imgonly, textonly, concat, tirg or tirg_lastconv'
+    print('Invalid model', opt.model)
+    print('available: imgonly, textonly, concat, tirg or tirg_lastconv')
     sys.exit()
   model = model.cuda()
 
@@ -176,7 +176,7 @@ def create_model_and_optimizer(opt, texts):
 
 def train_loop(opt, logger, trainset, testset, model, optimizer):
   """Function for train loop"""
-  print 'Begin training'
+  print('Begin training')
   losses_tracking = {}
   it = 0
   epoch = -1
@@ -185,12 +185,11 @@ def train_loop(opt, logger, trainset, testset, model, optimizer):
     epoch += 1
 
     # show/log stats
-    print 'It', it, 'epoch', epoch, 'Elapsed time', round(time.time() - tic,
-                                                          4), opt.comment
+    print('It', it, 'epoch', epoch, 'Elapsed time', round(time.time() - tic, 4), opt.comment)
     tic = time.time()
     for loss_name in losses_tracking:
       avg_loss = np.mean(losses_tracking[loss_name][-len(trainloader):])
-      print '    Loss', loss_name, round(avg_loss, 4)
+      print('    Loss', loss_name, round(avg_loss, 4))
       logger.add_scalar(loss_name, avg_loss, it)
     logger.add_scalar('learning_rate', optimizer.param_groups[0]['lr'], it)
 
@@ -203,7 +202,7 @@ def train_loop(opt, logger, trainset, testset, model, optimizer):
                   for metric_name, metric_value in t]
       for metric_name, metric_value in tests:
         logger.add_scalar(metric_name, metric_value, it)
-        print '    ', metric_name, round(metric_value, 4)
+        print('    ', metric_name, round(metric_value, 4))
 
     # save checkpoint
     torch.save({
@@ -231,7 +230,6 @@ def train_loop(opt, logger, trainset, testset, model, optimizer):
       img2 = torch.from_numpy(img2).float()
       img2 = torch.autograd.Variable(img2).cuda()
       mods = [str(d['mod']['str']) for d in data]
-      mods = [t.decode('utf-8') for t in mods]
 
       # compute loss
       losses = []
@@ -242,7 +240,7 @@ def train_loop(opt, logger, trainset, testset, model, optimizer):
         loss_value = model.compute_loss(
             img1, mods, img2, soft_triplet_loss=False)
       else:
-        print 'Invalid loss function', opt.loss
+        print('Invalid loss function', opt.loss)
         sys.exit()
       loss_name = opt.loss
       loss_weight = 1.0
@@ -256,7 +254,7 @@ def train_loop(opt, logger, trainset, testset, model, optimizer):
 
       # track losses
       for loss_name, loss_weight, loss_value in losses:
-        if not losses_tracking.has_key(loss_name):
+        if loss_name not in losses_tracking:
           losses_tracking[loss_name] = []
         losses_tracking[loss_name].append(float(loss_value))
 
@@ -274,23 +272,22 @@ def train_loop(opt, logger, trainset, testset, model, optimizer):
         for g in optimizer.param_groups:
           g['lr'] *= 0.1
 
-  print 'Finished training'
+  print('Finished training')
 
 
 def main():
   opt = parse_opt()
-  print 'Arguments:'
+  print('Arguments:')
   for k in opt.__dict__.keys():
-    print '    ', k, ':', str(opt.__dict__[k])
+    print('    ', k, ':', str(opt.__dict__[k]))
 
   logger = SummaryWriter(comment=opt.comment)
-  print 'Log files saved to', logger.file_writer.get_logdir()
+  print('Log files saved to', logger.file_writer.get_logdir())
   for k in opt.__dict__.keys():
     logger.add_text(k, str(opt.__dict__[k]))
 
   trainset, testset = load_dataset(opt)
-  model, optimizer = create_model_and_optimizer(
-      opt, [t.decode('utf-8') for t in trainset.get_all_texts()])
+  model, optimizer = create_model_and_optimizer(opt, trainset.get_all_texts())
 
   train_loop(opt, logger, trainset, testset, model, optimizer)
   logger.close()

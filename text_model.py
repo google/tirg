@@ -30,17 +30,22 @@ class SimpleVocab(object):
 
   def tokenize_text(self, text):
     text = text.encode('ascii', 'ignore').decode('ascii')
-    tokens = str(text).lower().translate(None,
-                                         string.punctuation).strip().split()
+    tokens = str(text).lower()
+    tokens = tokens.translate(str.maketrans('','',string.punctuation))
+    tokens = tokens.strip().split()
     return tokens
 
-  def add_text_to_vocab(self, text):
-    tokens = self.tokenize_text(text)
-    for token in tokens:
-      if not self.word2id.has_key(token):
+  def build(self, texts):
+    for text in texts:
+      tokens = self.tokenize_text(text)
+      for token in tokens:
+        if token not in self.wordcount:
+          self.wordcount[token] = 0
+        self.wordcount[token] += 1
+    for token in sorted(list(self.wordcount.keys())):
+      if token not in self.word2id:
         self.word2id[token] = len(self.word2id)
-        self.wordcount[token] = 0
-      self.wordcount[token] += 1
+
 
   def threshold_rare_words(self, wordcount_threshold=5):
     for w in self.word2id:
@@ -66,8 +71,7 @@ class TextLSTMModel(torch.nn.Module):
     super(TextLSTMModel, self).__init__()
 
     self.vocab = SimpleVocab()
-    for text in texts_to_build_vocab:
-      self.vocab.add_text_to_vocab(text)
+    self.vocab.build(texts_to_build_vocab)
     vocab_size = self.vocab.get_size()
 
     self.word_embed_dim = word_embed_dim
